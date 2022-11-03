@@ -53,6 +53,7 @@ void UseMenu()
         Menu();
         string enter = Console.ReadLine();
         bool check = int.TryParse(enter, out int chec);
+        Console.WriteLine();
         if (chec == 1)
         {
             Add();
