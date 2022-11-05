@@ -1,8 +1,17 @@
-﻿var valuePairs = new Dictionary<string, string>()
+﻿
+using System.Text.RegularExpressions;
+using System;
+using System.Xml.Linq;
+
+var translation1 = new List<string>() { "Pineapple","fgas" };
+var translation2 = new List<string>() { "Translator" };
+var translation3 = new List<string>() { "Dependence" };
+var valuePairs = new Dictionary<string, List<string>>()
 {
-    ["Ананас"] = "Pineappl",
-    ["Переводчик"] = "Translator ",
-    ["Зависимость"] = "Dependence",
+    ["a"]=new List<string>() {"gas","uyh" },
+    ["Ананас"] = translation1,
+    ["Переводчик"] = translation2,
+    ["Зависимость"] = translation3,
 };
 Console.WriteLine($"Введите слово");
 string word = Console.ReadLine();
@@ -22,7 +31,7 @@ else if (check == false)
         string enter = Console.ReadLine();
         if (enter == "да" || enter == "Да")
         {
-            valuePairs.Add(translation, word);
+            valuePairs.Add(translation, new List<string>() { word });
             break;
         }
         else if (enter == "нет" || enter == "Нет")
@@ -39,11 +48,12 @@ else if (check == false)
 void Menu()
 {
     Console.WriteLine();
-    Console.WriteLine($"1) Добавить слово и его перевод");
-    Console.WriteLine($"2) Получить все данные словаря");
-    Console.WriteLine($"3) Проверка наличия перевода слова");
-    Console.WriteLine($"4) Удалить слово и его перевод");
-    Console.WriteLine($"5) Изменить перевод конкретного слова");
+    Console.WriteLine($"1) Добавить слово и его перевод");//Работает
+    Console.WriteLine($"2) Получить все данные словаря");//Не работает
+    Console.WriteLine($"3) Проверка наличия перевода слова");//Работает
+    Console.WriteLine($"4) Удалить слово и его переводы");//Работает
+    Console.WriteLine($"5) Заменить перевод конкретного слова");//не работает (необходимо удастовериться)
+    Console.WriteLine($"6) Удалить конкретный перевод");//Работает (необходимо удастовериться)
     Console.WriteLine();
 }
 void UseMenu()
@@ -74,6 +84,10 @@ void UseMenu()
         {
             Key();
         }
+        else if (chec == 6)
+        {
+            DeleteATranslation();
+        }
         else
         {
             Console.WriteLine($"Выберите пункт из меню");
@@ -86,27 +100,40 @@ void Add()
     string word = Console.ReadLine();
     Console.WriteLine($"Введите превод которое хотите добавть");
     string translation = Console.ReadLine();
-    valuePairs.Add(word, translation);
+    valuePairs.Add(word, new List<string>() { translation });
 }
 void GetDictionary()
 {
-    foreach (KeyValuePair<string, string> pair in valuePairs)
+    foreach (var pair in valuePairs)
     {
+       
         Console.WriteLine(pair);
     }
 }
 void CheckValue()
 {
-    Console.WriteLine($"Введите перевод который хотите проверить");
-    string value = Console.ReadLine();
-    bool verifiedvalue = valuePairs.ContainsValue(value);
-    if (verifiedvalue == true)
+    Console.WriteLine($"Введите слово перевод которого хотите проверить");
+    string checkkey = Console.ReadLine();
+    bool verifiedkey = valuePairs.ContainsKey(checkkey);
+    if (verifiedkey == true)
     {
-        Console.WriteLine($"Такой перевод есть в словаре");
+        valuePairs.TryGetValue(checkkey, out var foundelement);
+        Console.WriteLine($"Введите перевод который хотите проверить");
+        string value = Console.ReadLine();
+        var verifiedvalue = foundelement.Contains(value);
+        //bool verifiedvalue = valuePairs.ContainsValue(value);
+        if (verifiedvalue == true)
+        {
+            Console.WriteLine($"Такой перевод есть в словаре");
+        }
+        else
+        {
+            Console.WriteLine($"Такого перевода нет в словаре");
+        }
     }
     else
     {
-        Console.WriteLine($"Такого перевода нет в словаре");
+        Console.WriteLine($"Такого слова нет");
     }
 }
 void Remove()
@@ -133,14 +160,65 @@ void Remove()
 }
 void Key()
 {
-    Console.WriteLine($"Введите слово перевод которого вы хотите поменять");
+    Console.WriteLine($"Введите слово перевод которого вы хотите заменить");
     string enter = Console.ReadLine();
+    valuePairs.TryGetValue(enter, out var foundelement);
     bool verifiedvalue = valuePairs.ContainsKey(enter);
     if (verifiedvalue == true)
     {
-        Console.WriteLine($"На какой перевод вы хотите поменять");
-        string a = Console.ReadLine();
-        valuePairs[enter] = $"{a}";
+        Console.WriteLine($"Какой перевод вы хотите заменить");
+        string which = Console.ReadLine();
+        bool checkvalue= foundelement.Contains(which);
+        if(checkvalue == true)
+        {
+            Console.WriteLine($"На какой перевод вы хотите заменть");
+            string onwhich = Console.ReadLine();
+            foundelement.Remove(which);
+            foundelement.Add(onwhich);
+        }
+        else
+        {
+            Console.WriteLine($"Нет такого перевода");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"Нет такого слова");
+    }
+}
+void DeleteATranslation()
+{
+    Console.WriteLine($"Введите слово перевод которого вы хотите удалить");
+    string enter = Console.ReadLine();
+    valuePairs.TryGetValue(enter, out var foundelement);
+    bool verifiedvalue = valuePairs.ContainsKey(enter);
+    if (verifiedvalue == true)
+    {
+        Console.WriteLine($"Введите перевод который хотите удалить");
+        string word = Console.ReadLine();
+        bool checkvalue = foundelement.Contains(word);
+        if (checkvalue == true)
+        {
+
+            if (foundelement.Count>1)  
+            {
+               bool a= foundelement.Remove(word);
+                if(a == true)
+                {
+                    Console.WriteLine($"Превод удалён");
+                }
+                else
+                {
+                    Console.WriteLine($"Перевод не удалён");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Перевод всего один удаление невозможно");
+            }
+        }
+            
+        
     }
     else
     {
