@@ -3,12 +3,12 @@ using System.Text.RegularExpressions;
 using System;
 using System.Xml.Linq;
 
-var translation1 = new List<string>() { "Pineapple","fgas" };
+var translation1 = new List<string>() { "Pineapple", "fgas" };
 var translation2 = new List<string>() { "Translator" };
 var translation3 = new List<string>() { "Dependence" };
 var valuePairs = new Dictionary<string, List<string>>()
 {
-    ["a"]=new List<string>() {"gas","uyh" },
+    ["a"] = new List<string>() { "gas", "uyh" },
     ["Ананас"] = translation1,
     ["Переводчик"] = translation2,
     ["Зависимость"] = translation3,
@@ -22,12 +22,12 @@ if (check == true)
 }
 else if (check == false)
 {
-
     Console.WriteLine($"Такого слова нет введите перевод");
     string translation = Console.ReadLine();
-    Console.WriteLine($"Хотите ли вы записать в словарь это слово и его перевод (введите да или нет)");
     while (true)
     {
+        Console.WriteLine($"Хотите ли вы записать в словарь это слово и его перевод (введите да или нет)");
+
         string enter = Console.ReadLine();
         if (enter == "да" || enter == "Да")
         {
@@ -48,12 +48,12 @@ else if (check == false)
 void Menu()
 {
     Console.WriteLine();
-    Console.WriteLine($"1) Добавить слово и его перевод");//Работает
-    Console.WriteLine($"2) Получить все данные словаря");//Не работает
-    Console.WriteLine($"3) Проверка наличия перевода слова");//Работает
-    Console.WriteLine($"4) Удалить слово и его переводы");//Работает
-    Console.WriteLine($"5) Заменить перевод конкретного слова");//не работает (необходимо удастовериться)
-    Console.WriteLine($"6) Удалить конкретный перевод");//Работает (необходимо удастовериться)
+    Console.WriteLine($"1) Добавить слово и его перевод");
+    Console.WriteLine($"2) Получить все данные словаря");
+    Console.WriteLine($"3) Проверка наличия перевода слова");
+    Console.WriteLine($"4) Удалить слово и его переводы");
+    Console.WriteLine($"5) Заменить перевод конкретного слова");
+    Console.WriteLine($"6) Удалить конкретный перевод");
     Console.WriteLine();
 }
 void UseMenu()
@@ -106,8 +106,13 @@ void GetDictionary()
 {
     foreach (var pair in valuePairs)
     {
-       
-        Console.WriteLine(pair);
+        
+        Console.WriteLine($"Слово - {pair.Key} перевод(ы): ");
+        foreach(var i in pair.Value)
+        {
+            Console.WriteLine($"{i}");
+        }
+        Console.WriteLine();
     }
 }
 void CheckValue()
@@ -168,8 +173,8 @@ void Key()
     {
         Console.WriteLine($"Какой перевод вы хотите заменить");
         string which = Console.ReadLine();
-        bool checkvalue= foundelement.Contains(which);
-        if(checkvalue == true)
+        bool checkvalue = foundelement.Contains(which);
+        if (checkvalue == true)
         {
             Console.WriteLine($"На какой перевод вы хотите заменть");
             string onwhich = Console.ReadLine();
@@ -200,10 +205,10 @@ void DeleteATranslation()
         if (checkvalue == true)
         {
 
-            if (foundelement.Count>1)  
+            if (foundelement.Count > 1)
             {
-               bool a= foundelement.Remove(word);
-                if(a == true)
+                bool a = foundelement.Remove(word);
+                if (a == true)
                 {
                     Console.WriteLine($"Превод удалён");
                 }
@@ -217,8 +222,8 @@ void DeleteATranslation()
                 Console.WriteLine("Перевод всего один удаление невозможно");
             }
         }
-            
-        
+
+
     }
     else
     {
